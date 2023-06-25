@@ -1,7 +1,7 @@
 
-# DigitalEncoderSPI-AS5147P
+# DigitalRotaryEncoderSPI-AS5147P
 
-The AS5147P absolute digital encoder is useful for various projects, due to its 12-bit accuracy and high speed operation. It has a sampling rate tested up to 1.3MHz, although limiting the sampling rate to ~1.1MHz yields better overall stability.
+The AS5147P absolute digital rotary encoder is useful for various projects, due to its 12-bit accuracy and high speed operation. It has a sampling rate tested up to 1.3MHz, although limiting the sampling rate to ~1.1MHz yields better overall stability.
 
 ## Platforms
 

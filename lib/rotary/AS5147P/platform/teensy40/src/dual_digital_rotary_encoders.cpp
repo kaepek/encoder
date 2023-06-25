@@ -1,4 +1,4 @@
-#include "generic/dual_digital_encoders.hpp"
+#include "generic/dual_digital_rotary_encoders.hpp"
 
 namespace kaepek
 {
@@ -6,10 +6,10 @@ namespace kaepek
     const uint32_t DIGITAL_ENCODER_AS5147P_BUFFER_MAX_INDEX = 15;
     const uint32_t DIGITAL_ENCODER_AS5147P_BUFFER_VALUE_MASK = 0x3FFF;
 
-    const uint32_t DigitalEncoderSPI::encoder_divisions = 16384;
-    const uint32_t DigitalEncoderSPI::encoder_divisions_over_2 = 16384 / 2;
+    const uint32_t DigitalRotaryEncoderSPI::encoder_divisions = 16384;
+    const uint32_t DigitalRotaryEncoderSPI::encoder_divisions_over_2 = 16384 / 2;
 
-    DualDigitalEncodersSPI::DualDigitalEncodersSPI(DigitalEncoderSPI enc1, DigitalEncoderSPI enc2)
+    DualDigitalRotaryEncodersSPI::DualDigitalRotaryEncodersSPI(DigitalRotaryEncoderSPI enc1, DigitalRotaryEncoderSPI enc2)
     {
         this->enc1 = enc1;
         this->enc2 = enc2;
@@ -17,17 +17,17 @@ namespace kaepek
         this->pins_enc2 = enc2.getPins();
     }
 
-    DualDigitalEncodersSPI::DualDigitalEncodersSPI()
+    DualDigitalRotaryEncodersSPI::DualDigitalRotaryEncodersSPI()
     {
     }
 
-    void DualDigitalEncodersSPI::setup()
+    void DualDigitalRotaryEncodersSPI::setup()
     {
         this->enc1.setup();
         this->enc2.setup();
     };
 
-    DualEncodersSensorValues DualDigitalEncodersSPI::read()
+    DualEncodersSensorValues DualDigitalRotaryEncodersSPI::read()
     {
         // Define slave bit buffer.
         bool enc1_miso_buffer_bit = 0;
@@ -486,7 +486,7 @@ namespace kaepek
         return output;
     }
 
-    void DualDigitalEncodersSPI::read(DualEncodersSensorValues &sensorValues)
+    void DualDigitalRotaryEncodersSPI::read(DualEncodersSensorValues &sensorValues)
     {
         sensorValues = read();
     }

@@ -1,4 +1,4 @@
-#include "digital_encoder.hpp"
+#include "digital_rotary_encoder.hpp"
 
 namespace kaepek
 {
@@ -9,7 +9,7 @@ namespace kaepek
     /**
      * Dual digital encoder driver for reading sensor values from two digital encoders simultaneously via their SPI interfaces.
      */
-    class DualDigitalEncodersSPI
+    class DualDigitalRotaryEncodersSPI
     {
     private:
         // Digital encoder SPI pin configuration for encoder 1.
@@ -17,26 +17,26 @@ namespace kaepek
         // Digital encoder SPI pin configuration for encoder 2.
         DigitalEncoderPinsSPI pins_enc2;
         // Digital encoder 1 instance.
-        DigitalEncoderSPI enc1;
+        DigitalRotaryEncoderSPI enc1;
         // Digital encoder 2 instance.
-        DigitalEncoderSPI enc2;
+        DigitalRotaryEncoderSPI enc2;
 
     public:
         /**
-         * DualDigitalEncodersSPI default constructor.
+         * DualDigitalRotaryEncodersSPI default constructor.
          *
-         * @return Instance of DualDigitalEncodersSPI class.
+         * @return Instance of DualDigitalRotaryEncodersSPI class.
          */
-        DualDigitalEncodersSPI();
+        DualDigitalRotaryEncodersSPI();
 
         /**
-         * DualDigitalEncodersSPI constructor with parameters.
+         * DualDigitalRotaryEncodersSPI constructor with parameters.
          *
-         * @param enc1 instance of the DigitalEncoderSPI class for encoder 1.
-         * @param enc2 instance of the DigitalEncoderSPI class for encoder 2.
-         * @return Instance of DualDigitalEncodersSPI class.
+         * @param enc1 instance of the DigitalRotaryEncoderSPI class for encoder 1.
+         * @param enc2 instance of the DigitalRotaryEncoderSPI class for encoder 2.
+         * @return Instance of DualDigitalRotaryEncodersSPI class.
          */
-        DualDigitalEncodersSPI(DigitalEncoderSPI enc1, DigitalEncoderSPI enc2);
+        DualDigitalRotaryEncodersSPI(DigitalRotaryEncoderSPI enc1, DigitalRotaryEncoderSPI enc2);
 
         /**
          * Method to setup both encoders such that they are ready to read measurement values via invocation of the read method.

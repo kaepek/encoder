@@ -1,12 +1,12 @@
 #include <Arduino.h>
 #include "imxrt.h"
-#include "digital_encoder.hpp"
+#include "digital_rotary_encoder.hpp"
 
 namespace kaepek
 {
 
-#ifndef KAEPEK_GENERIC_ENCODER_TRACKING
-#define KAEPEK_GENERIC_ENCODER_TRACKING
+#ifndef KAEPEK_ROTARY_ENCODER_SAMPLE_VALIDATOR
+#define KAEPEK_ROTARY_ENCODER_SAMPLE_VALIDATOR
 
     /**
      * Encoder sample validator class for a single encoder. Allows for safe usage of an encoder, as it validates that the received values
@@ -14,30 +14,30 @@ namespace kaepek
      *
      * Logic implemented within the post_sample_logic(uint32_t encoder_value) is only fired if a sample is considered reliable.
      *
-     * Logic implemented within the post_fault_logic(kaepek::EncoderSampleValidator::Fault fault_code) is fired if an issue with the encoder is detected, or if set_direction_enforcement method has be called with the bool enabled = true argument and it turned against the validated direction.
+     * Logic implemented within the post_fault_logic(kaepek::RotaryEncoderSampleValidator::Fault fault_code) is fired if an issue with the encoder is detected, or if set_direction_enforcement method has be called with the bool enabled = true argument and it turned against the validated direction.
      */
-    class EncoderSampleValidator
+    class RotaryEncoderSampleValidator
     {
     public:
         /**
-         * EncoderSampleValidator default constructor.
+         * RotaryEncoderSampleValidator default constructor.
          *
-         * @return Instance of EncoderSampleValidator class.
+         * @return Instance of RotaryEncoderSampleValidator class.
          */
-        EncoderSampleValidator();
+        RotaryEncoderSampleValidator();
 
         /**
-         * EncoderSampleValidator constructor with parameters.
+         * RotaryEncoderSampleValidator constructor with parameters.
          *
          * @param encoder
          * @param sample_period_microseconds
-         * @return Instance of DualDigitalEncoderSampleValidatorEncoderSPI class.
+         * @return Instance of DualDigitalRotaryEncoderSampleValidatorEncoderSPI class.
          */
-        EncoderSampleValidator(DigitalEncoderSPI encoder, float sample_period_microseconds);
+        RotaryEncoderSampleValidator(DigitalRotaryEncoderSPI encoder, float sample_period_microseconds);
 
         /**
-         * EncoderSampleValidator Fault enum class type:
-         * - WrongDirection: indicates that the encoder move against the configured EncoderSampleValidator direction for enough samples to trigger a fault.
+         * RotaryEncoderSampleValidator Fault enum class type:
+         * - WrongDirection: indicates that the encoder move against the configured RotaryEncoderSampleValidator direction for enough samples to trigger a fault.
          * - SkippedSteps: indicates that the the encoder tracker lost tracking for enough samples to trigger a fault.
          */
         enum class Fault
@@ -48,7 +48,7 @@ namespace kaepek
 
         /**
          * ConfigurationIssue enum typedef:
-         * A collection of configuration issue descriptions for the EncoderSampleValidator class indicating it has not been configured correctly and will not start successfully.
+         * A collection of configuration issue descriptions for the RotaryEncoderSampleValidator class indicating it has not been configured correctly and will not start successfully.
          * - DirectionNotSet: indicates one needs to invoke the set_direction method with a valid direction value.
          * - SkipToleranceNotSet: indicates one needs to invoke the set_skip_tolerance method with a valid tolerance value.
          * - SkipFaultThresholdNotSet: indicates one needs to invoke the set_skip_threshold method with a valid threshold value.
@@ -71,10 +71,10 @@ namespace kaepek
         };
 
         /**
-         * EncoderSampleValidator Direction enum class type:
+         * RotaryEncoderSampleValidator Direction enum class type:
          * - CounterClockwise
          * - Clockwise
-         * - UnSet: indicates an invalid EncoderSampleValidator direction value.
+         * - UnSet: indicates an invalid RotaryEncoderSampleValidator direction value.
          */
         enum class Direction
         {
@@ -305,7 +305,7 @@ namespace kaepek
         volatile bool tracking_point_initalised = false;
 
         // The internal encoder instance.
-        DigitalEncoderSPI encoder;
+        DigitalRotaryEncoderSPI encoder;
 
         // A boolean array describing the current configuration issues of the EncoderTracker, see the ConfigurationIssue enum deftype or ConfigurationIssueMessage char array for details.
         bool configuration_issues[6] = {false};

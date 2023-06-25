@@ -19,13 +19,13 @@ namespace kaepek
 
 #endif
 
-#ifndef KAEPEK_DIGITAL_ENCODER_SPI
-#define KAEPEK_DIGITAL_ENCODER_SPI
+#ifndef KAEPEK_DIGITAL_ROTARY_ENCODER_SPI
+#define KAEPEK_DIGITAL_ROTARY_ENCODER_SPI
 
     /**
      * Digital encoder driver for reading sensor values from a single digital encoder via its SPI interface.
      */
-    class DigitalEncoderSPI
+    class DigitalRotaryEncoderSPI
     {
 
     private:
@@ -42,24 +42,24 @@ namespace kaepek
         static const uint32_t skip_threshold;
 
         /**
-         * DigitalEncoderSPI default constructor.
+         * DigitalRotaryEncoderSPI default constructor.
          *
-         * @return Instance of DigitalEncoderSPI class.
+         * @return Instance of DigitalRotaryEncoderSPI class.
          */
-        DigitalEncoderSPI();
+        DigitalRotaryEncoderSPI();
 
         /**
-         * DigitalEncoderSPI constructor with DigitalEncoderPinsSPI parameter.
+         * DigitalRotaryEncoderSPI constructor with DigitalEncoderPinsSPI parameter.
          *
          * @param pins pin configuration for digital encoders with an SPI interface.
-         * @return Instance of DigitalEncoderSPI class.
+         * @return Instance of DigitalRotaryEncoderSPI class.
          */
-        DigitalEncoderSPI(DigitalEncoderPinsSPI pins);
+        DigitalRotaryEncoderSPI(DigitalEncoderPinsSPI pins);
 
         /**
-         * Method to retrieve the DigitalEncoderSPI instance's SPI interface pin configuration.
+         * Method to retrieve the DigitalRotaryEncoderSPI instance's SPI interface pin configuration.
          *
-         * @return Instance of the DigitalEncoderPinsSPI struct stored within the DigitalEncoderSPI instance as a private variable.
+         * @return Instance of the DigitalEncoderPinsSPI struct stored within the DigitalRotaryEncoderSPI instance as a private variable.
          */
         DigitalEncoderPinsSPI getPins();
 

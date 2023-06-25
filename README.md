@@ -2,26 +2,28 @@
 
 Drivers for microcontrollers enabling them to read encoders and supporting tooling to aid using them for real world applications.
 
-# Digital encoders:
+# Rotary encoders:
 
-## Supported encoders:
+## Digital rotary encoders:
+
+### Supported digital rotary encoders:
 
 - [AS5147P](./lib/AS5147P/README.md)
 
-## DigitalEncoderSPI/DualDigitalEncodersSPI usage example:
+### DigitalRotaryEncoderSPI/DualDigitalRotaryEncodersSPI usage example:
 
-A digital encoder with an SPI interface can be read by configuring the ```DigitalEncoderPinsSPI``` struct and initalising the ```DigitalEncoderSPI``` class with the pins struct argument. Moreover one can choose
-to initalise the ```DualDigitalEncodersSPI``` class with two ```DigitalEncoderSPI``` instances, this enables reading from two encoders simultaneously maximising the sampling frequency of the combined system. 
+A digital encoder with an SPI interface can be read by configuring the ```DigitalEncoderPinsSPI``` struct and initalising the ```DigitalRotaryEncoderSPI``` class with the pins struct argument. Moreover one can choose
+to initalise the ```DualDigitalRotaryEncodersSPI``` class with two ```DigitalRotaryEncoderSPI``` instances, this enables reading from two encoders simultaneously maximising the sampling frequency of the combined system. 
 
 ```
-#include "lib/{ENCODER_NAME}/platform/{MICROCONTROLLER}/digital_encoder.cpp"
-#include "lib/{ENCODER_NAME}/platform/{MICROCONTROLLER}/dual_digital_encoders.cpp"
+#include "lib/rotary/{ENCODER_NAME}/platform/{MICROCONTROLLER}/digital_rotary_encoder.cpp"
+#include "lib/rotary/{ENCODER_NAME}/platform/{MICROCONTROLLER}/dual_digital_rotary_encoders.cpp"
 
 kaepek::DigitalEncoderPinsSPI enc1_pins = kaepek::DigitalEncoderPinsSPI();
 kaepek::DigitalEncoderPinsSPI enc2_pins = kaepek::DigitalEncoderPinsSPI();
-kaepek::DigitalEncoderSPI enc1;
-kaepek::DigitalEncoderSPI enc2;
-kaepek::DualDigitalEncodersSPI dualenc;
+kaepek::DigitalRotaryEncoderSPI enc1;
+kaepek::DigitalRotaryEncoderSPI enc2;
+kaepek::DualDigitalRotaryEncodersSPI dualenc;
 
 void setup() {
   // Set encoder pins.
@@ -35,9 +37,9 @@ void setup() {
   enc_pins2.sck = 17;
 
   // Init encoder classes.
-  enc1 = kaepek::DigitalEncoderSPI(enc1_pins);
-  enc2 = kaepek::DigitalEncoderSPI(enc2_pins);
-  dualenc = kaepek::DualDigitalEncodersSPI(enc1, enc2);
+  enc1 = kaepek::DigitalRotaryEncoderSPI(enc1_pins);
+  enc2 = kaepek::DigitalRotaryEncoderSPI(enc2_pins);
+  dualenc = kaepek::DualDigitalRotaryEncodersSPI(enc1, enc2);
 }
 
 void loop() {
@@ -54,37 +56,37 @@ void loop() {
 
 ```
 
-# Encoder sample validator:
+### Rotary encoder sample validator:
 
-Encoders are physical devices which have an intrinsic error and which may fail (or the connecting wires may fail). Thus a class ```EncoderSampleValidator``` is provided to aid
+Encoders are physical devices which have an intrinsic error and which may fail (or the connecting wires may fail). Thus a class ```RotaryEncoderSampleValidator``` is provided to aid
 fault detection from implausable encoder readings, and to then invoke additional behaviour; in order to deal with the situation. Moreover for certain applications, one may wish to additionally validate that the encoder is only moving in a single specified direction (clockwise/anti-clockwise), moving against the configured direction could indicate a fault state, where additional logic should be invoked; in order to deal that situation. For instance a record deck for Hi-Fi applications could use a needle, that could be broken by motion of the deck in the wrong direction (which may occur by incorrect motor phase wiring, e.g. by accidentally swapping phases A & C, for a 3 phase system) and thus when this fault is detected, the motor should be shutoff, to prevent damage to the needle.
 
-One may inherit from the class ```EncoderSampleValidator``` and extended it such that the supplied extended behaviour can automatically be invoked, when the class instance detects a faulty state. Please note that this class currently may only be used with the ```DigitalEncoderSPI``` class, Kaepek aims to support the ```DualDigitalEncodersSPI``` class with a ```DualEncodersSampleValidator``` class at somepoint in the future.
+One may inherit from the class ```RotaryEncoderSampleValidator``` and extended it such that the supplied extended behaviour can automatically be invoked, when the class instance detects a faulty state. Please note that this class currently may only be used with the ```DigitalRotaryEncoderSPI``` class, Kaepek aims to support the ```DualDigitalRotaryEncodersSPI``` class with a ```DualEncodersSampleValidator``` class at somepoint in the future.
 
-## Encoder sample validator usage example:
+### Rotary encoder sample validator usage example:
 
 ```
-#include "lib/{ENCODER_NAME}/platform/{MICROCONTROLLER}/digital_encoder.cpp"
-#include "lib/generic/encoder_sample_validator.cpp"
+#include "lib/rotary/{ENCODER_NAME}/platform/{MICROCONTROLLER}/src/digital_rotary_encoder.cpp"
+#include "lib/rotary/generic/rotary_encoder_sample_validator.cpp"
 
 /**
-* Example extension to the EncoderSampleValidator class:
+* Example extension to the RotaryEncoderSampleValidator class:
 *
 * An electronic speed controller could be implemented: post_sample_logic could do PWM switching
 * based on encoder's validated position and post_fault_logic could deal with faults by switching off the PWM pins.
 */
 namespace kaepek
 {
-  class DemoESC : public EncoderSampleValidator
+  class DemoESC : public RotaryEncoderSampleValidator
   {
   public:
     // Default constuctor.
-    DemoESC() : EncoderSampleValidator()
+    DemoESC() : RotaryEncoderSampleValidator()
     {
     }
 
     // Constructor with parameters.
-    DemoESC(DigitalEncoderSPI encoder, float sample_period_microseconds) : EncoderSampleValidator(encoder, sample_period_microseconds)
+    DemoESC(DigitalRotaryEncoderSPI encoder, float sample_period_microseconds) : RotaryEncoderSampleValidator(encoder, sample_period_microseconds)
     {
     }
 
@@ -93,15 +95,15 @@ namespace kaepek
       // Set PWM pin state for this commutation, based upon the current validated encoder position <encoder_value>.
     }
 
-    void post_fault_logic(EncoderSampleValidator::Fault fault_code)
+    void post_fault_logic(RotaryEncoderSampleValidator::Fault fault_code)
     {
       // Turn off motor by setting PWM pins off.
 
       // Do something fault specific based on the <fault_code>.
-      if (fault_code == EncoderSampleValidator::Fault::SkippedSteps)
+      if (fault_code == RotaryEncoderSampleValidator::Fault::SkippedSteps)
       {
       }
-      else if (fault_code == EncoderSampleValidator::Fault::WrongDirection)
+      else if (fault_code == RotaryEncoderSampleValidator::Fault::WrongDirection)
       {
       }
     }
@@ -111,7 +113,7 @@ namespace kaepek
 // Define encoder pin config struct.
 kaepek::DigitalEncoderPinsSPI enc_pins = kaepek::DigitalEncoderPinsSPI();
 // Define the encoder.
-kaepek::DigitalEncoderSPI enc;
+kaepek::DigitalRotaryEncoderSPI enc;
 // Define the encoder sampler.
 kaepek::DemoESC sampler;
 // Define bool for knowing if the sampler started is a good state.
@@ -126,7 +128,7 @@ void setup()
   enc_pins.sck = 22;
   
   // Initalise the encoder with giving it the pin configuration.
-  enc = kaepek::DigitalEncoderSPI(enc_pins);
+  enc = kaepek::DigitalRotaryEncoderSPI(enc_pins);
 
   // Initalise the encoder sampler.
   sampler = kaepek::DemoESC(enc, 2.0); // 2us (micro) sample period
@@ -139,9 +141,9 @@ void setup()
   // To enable direction enforcement, invoke the sampler set_direction_enforcement method with a true argument.
   sampler.set_direction_enforcement(true);
   // Set direction validation to be Clockwise (otherwise you could choose 'CounterClockwise').
-  sampler.set_direction(kaepek::EncoderSampleValidator::Direction::Clockwise);
+  sampler.set_direction(kaepek::RotaryEncoderSampleValidator::Direction::Clockwise);
   // Specify the maximum encoder value change allowed in the wrong direction, before wrong direction motion is detected.
-  sampler.set_wrong_way_tolerance((double)kaepek::DigitalEncoderSPI::encoder_divisions / (14.0)); // For a 14 pole motor.
+  sampler.set_wrong_way_tolerance((double)kaepek::DigitalRotaryEncoderSPI::encoder_divisions / (14.0)); // For a 14 pole motor.
   // Allow two detections of motion in wrong direction before faulting.
   sampler.set_wrong_way_threshold(2);
 
@@ -178,21 +180,25 @@ void loop()
 
 }
 ```
+### Useful links
+- [Rotary encoder sensor overview1](https://www.electronicproducts.com/absolute-position-sensing-the-key-to-better-brushless-dc-motor-control/)
+- [Rotary encoder sensor overview2](https://www.seeedstudio.com/blog/2020/01/19/rotary-encoders-how-it-works-how-to-use-with-arduino/)
 
-## EncoderSampleValidator dependancies:
+# Linear encoders:
+
+- Todo
+
+# Dependancies for any EncoderSampleValidator:
 
 - [TeensyTimerTool](https://github.com/luni64/TeensyTimerTool/blob/master/LICENSE)
 
-## How to prepare the Teensy40 platform in order to use the EncoderSampleValidator class:
+# How to prepare the Teensy40 platform in order to use any EncoderSampleValidator:
 - Install [Arduino IDE v1.8.19](https://www.arduino.cc/en/software)
 - Install [Teensyduino v2.1.0](https://www.pjrc.com/teensy/teensyduino.html)
 - Install [TeensyTimerTool library](https://github.com/luni64/TeensyTimerTool) by opening up Arduino IDE click the "Sketch" menu item, go down to "Include Library" and click "Manage Libraries...". Enter in the filter you search the string "TeensyTimerTool", select the correct version "Version 1.3.0" and click the install button.
-
-# Useful links
-- [Rotary encoder sensor overview1](https://www.electronicproducts.com/absolute-position-sensing-the-key-to-better-brushless-dc-motor-control/)
-- [Rotary encoder sensor overview2](https://www.seeedstudio.com/blog/2020/01/19/rotary-encoders-how-it-works-how-to-use-with-arduino/)
 
 # General dependancies:
 
 - [Arduino.h](https://github.com/arduino/ArduinoCore-avr)
 - [imxrt.h](https://github.com/PaulStoffregen/cores/tree/master)
+

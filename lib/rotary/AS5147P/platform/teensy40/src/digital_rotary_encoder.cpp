@@ -1,4 +1,4 @@
-#include "generic/digital_encoder.hpp"
+#include "generic/digital_rotary_encoder.hpp"
 
 namespace kaepek
 {
@@ -7,24 +7,24 @@ namespace kaepek
     const uint32_t DIGITAL_ENCODER_AS5147P_BUFFER_MAX_INDEX = 15;
     const uint32_t DIGITAL_ENCODER_AS5147P_BUFFER_VALUE_MASK  = 0x3FFF;
 
-    const uint32_t DigitalEncoderSPI::encoder_divisions = 16384;
-    const uint32_t DigitalEncoderSPI::encoder_divisions_over_2 = 16384 / 2;
+    const uint32_t DigitalRotaryEncoderSPI::encoder_divisions = 16384;
+    const uint32_t DigitalRotaryEncoderSPI::encoder_divisions_over_2 = 16384 / 2;
 
 #ifndef KAEPEK_ENCODER_SKIP_DEFAULT_CONFIG
 #define KAEPEK_ENCODER_SKIP_DEFAULT_CONFIG
-    const double DigitalEncoderSPI::skip_tolerance = 4.0;
-    const uint32_t DigitalEncoderSPI::skip_threshold = 2;
+    const double DigitalRotaryEncoderSPI::skip_tolerance = 4.0;
+    const uint32_t DigitalRotaryEncoderSPI::skip_threshold = 2;
 #endif
 
-    double DigitalEncoderSPI::get_reading_delta(double old_value, double new_value)
+    double DigitalRotaryEncoderSPI::get_reading_delta(double old_value, double new_value)
     {
         // Take difference.
         double delta = new_value - old_value;
         // Apply modulus.
-        delta = delta - DigitalEncoderSPI::encoder_divisions * floor(delta / DigitalEncoderSPI::encoder_divisions);
-        if (delta > DigitalEncoderSPI::encoder_divisions_over_2)
+        delta = delta - DigitalRotaryEncoderSPI::encoder_divisions * floor(delta / DigitalRotaryEncoderSPI::encoder_divisions);
+        if (delta > DigitalRotaryEncoderSPI::encoder_divisions_over_2)
         {
-            return -(DigitalEncoderSPI::encoder_divisions - delta);
+            return -(DigitalRotaryEncoderSPI::encoder_divisions - delta);
         }
         else
         {
@@ -32,21 +32,21 @@ namespace kaepek
         }
     }
 
-    DigitalEncoderSPI::DigitalEncoderSPI()
+    DigitalRotaryEncoderSPI::DigitalRotaryEncoderSPI()
     {
     }
 
-    DigitalEncoderSPI::DigitalEncoderSPI(DigitalEncoderPinsSPI pins)
+    DigitalRotaryEncoderSPI::DigitalRotaryEncoderSPI(DigitalEncoderPinsSPI pins)
     {
         this->pins = pins;
     }
 
-    DigitalEncoderPinsSPI DigitalEncoderSPI::getPins()
+    DigitalEncoderPinsSPI DigitalRotaryEncoderSPI::getPins()
     {
         return this->pins;
     }
 
-    void DigitalEncoderSPI::setup()
+    void DigitalRotaryEncoderSPI::setup()
     {
         // Set pin modes.
         pinMode(this->pins.csn, OUTPUT);
@@ -57,7 +57,7 @@ namespace kaepek
         digitalWrite(this->pins.mosi, HIGH); // This can be left high, as the command is all ones.
     };
 
-    void DigitalEncoderSPI::read(uint32_t &value, bool &parity)
+    void DigitalRotaryEncoderSPI::read(uint32_t &value, bool &parity)
     {
         // Define parity check bit and slave bit buffer.
         bool miso_buffer_bit, parity_bit_check = 0;
@@ -102,7 +102,7 @@ namespace kaepek
         parity = parity_check_result;
     }
 
-    uint32_t DigitalEncoderSPI::read()
+    uint32_t DigitalRotaryEncoderSPI::read()
     {
         // Define parity check bit and slave bit buffer.
         bool miso_buffer_bit = 0; 
@@ -471,7 +471,7 @@ namespace kaepek
         return value;
     }
 
-    void DigitalEncoderSPI::read(uint32_t &value)
+    void DigitalRotaryEncoderSPI::read(uint32_t &value)
     {
         value = read();
     }
