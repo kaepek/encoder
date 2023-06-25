@@ -45,8 +45,7 @@ void loop() {
 ```
 
 ### Test:
-
-- [DigitalRotaryEncoderSPI test](../../../../test/AS5147P/platform/teensy40/encoder_test/encoder_test.ino)
+- [DigitalRotaryEncoderSPI test](../../../../../test/rotary/AS5147P/platform/teensy40/encoder_test/encoder_test.ino)
 
 ## Rotary encoder sample validator usage example:
 
@@ -167,13 +166,13 @@ void loop()
 
 ### Test:
 
-- [Encoder sample validator test](../../../../test/AS5147P/platform/teensy40/encoder_sample_validator/encoder_sample_validator.ino)
+- [Encoder sample validator test](../../../../../test/rotary/AS5147P/platform/teensy40/encoder_sample_validator/encoder_sample_validator.ino)
 
 ## Connection for AS5147P if using the KAEPEK-CALIBRATION circuit:
 
 [Circuit](https://github.com/kaepek/calibration/tree/master/circuits/calibration/circuit)
 
-![calibration circuit](../../../../resources/AS5147P_calibration_encoder_wiring.png)
+![calibration circuit](../../../../../resources/AS5147P_calibration_encoder_wiring.png)
 
 --------------------------------------------------------------------------
 - [Parent README](../../README.md)

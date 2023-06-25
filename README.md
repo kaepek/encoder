@@ -8,7 +8,7 @@ Drivers for microcontrollers enabling them to read encoders and supporting tooli
 
 ### Supported digital rotary encoders:
 
-- [AS5147P](./lib/AS5147P/README.md)
+- [AS5147P](./lib/rotary/AS5147P/README.md)
 
 ### DigitalRotaryEncoderSPI/DualDigitalRotaryEncodersSPI usage example:
 

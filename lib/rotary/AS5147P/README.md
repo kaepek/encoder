@@ -18,4 +18,4 @@ The AS5147P absolute digital rotary encoder is useful for various projects, due 
 - [AS5147P datasheet](https://ams.com/documents/20143/36005/AS5147P_DS000328_2-00.pdf)
 
 --------------------------------------------------------------------------
-[Parent README](../../README.md)
+[Parent README](../../../README.md)
