@@ -51,7 +51,7 @@ void loop() {
 ## Rotary encoder sample validator usage example:
 
 ```
-#include "lib/rotary/AS5147P/platform/teensy40/src/digital_rotary_encoder.cpp"
+#include "lib/rotary/AS5147P/platform/teensy40/digital_rotary_encoder.cpp"
 #include "lib/rotary/generic/rotary_encoder_sample_validator.cpp"
 
 /**
@@ -174,10 +174,6 @@ void loop()
 [Circuit](https://github.com/kaepek/calibration/tree/master/circuits/calibration/circuit)
 
 ![calibration circuit](../../../../resources/AS5147P_calibration_encoder_wiring.png)
-
-## Source
-
-- [Code source](./src/)
 
 --------------------------------------------------------------------------
 - [Parent README](../../README.md)

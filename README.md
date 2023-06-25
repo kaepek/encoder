@@ -66,7 +66,7 @@ One may inherit from the class ```RotaryEncoderSampleValidator``` and extended i
 ### Rotary encoder sample validator usage example:
 
 ```
-#include "lib/rotary/{ENCODER_NAME}/platform/{MICROCONTROLLER}/src/digital_rotary_encoder.cpp"
+#include "lib/rotary/{ENCODER_NAME}/platform/{MICROCONTROLLER}/digital_rotary_encoder.cpp"
 #include "lib/rotary/generic/rotary_encoder_sample_validator.cpp"
 
 /**
