@@ -1,4 +1,4 @@
-# KAEPEK-ENCODER V1.0.0
+# KAEPEK-ENCODER V2.0.0
 
 Drivers for microcontrollers enabling them to read encoders and supporting tooling to aid using them for real world applications.
 
