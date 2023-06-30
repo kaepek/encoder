@@ -6,12 +6,12 @@ namespace kaepek
 #define KAEPEK_DIGITAL_ROTARY_ENCODER_SPI_IMPL
 
     template <typename T>
-    void DigitalRotaryEncoderSPI<T>::DigitalRotaryEncoderSPI()
+    void DigitalRotaryEncoderSPI<T>::DigitalRotaryEncoderSPI() : Encoder ()
     {
     }
 
     template <typename T>
-    void DigitalRotaryEncoderSPI<T>::DigitalRotaryEncoderSPI(DigitalEncoderPinsSPI pins)
+    void DigitalRotaryEncoderSPI<T>::DigitalRotaryEncoderSPI(DigitalEncoderPinsSPI pins) : Encoder ()
     {
         this->pins = pins;
     }
@@ -31,5 +31,6 @@ namespace kaepek
         pinMode(this->pins.miso, INPUT);
         pinMode(this->pins.sck, OUTPUT);
     };
+
 #endif
 }

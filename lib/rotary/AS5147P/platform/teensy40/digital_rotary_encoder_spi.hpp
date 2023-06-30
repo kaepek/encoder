@@ -13,6 +13,7 @@ namespace kaepek
     template <>
     class DigitalRotaryEncoderSPI<AS5147P> : public DigitalRotaryEncoderSPI<AS5147P>
     {
+        // need virtual methods again?
     };
 
 #endif
