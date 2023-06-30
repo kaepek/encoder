@@ -27,21 +27,21 @@
          * Method to setup the encoder such that it is ready to read measurement values via invocation of the read method.
          *
          */
-        void setup();
+        virtual void setup() = 0;
 
         /**
          * Method to retrieve digital encoder measurement value.
          *
          * @return The encoder's current value.
          */
-        uint32_t read();
+        virtual uint32_t read() = 0;
 
         /**
          * Method to retrieve the encoder measurement value.
          *
          * @param value reference to the value variable in which to populate the encoder's current measurement value.
          */
-        void read(uint32_t &value);
+        virtual void read(uint32_t &value) = 0;
 
         /**
          * Method to calculate the difference between old and new encoder measurement values. Respects modular arithmetic of the encoder_divisions.
