@@ -50,12 +50,14 @@ namespace kaepek
         }
     }
 
+    template <typename T>
     void RotaryEncoderSampleValidator<T>::set_direction_enforcement(bool enabled)
     {
         this->direction_enforcement = enabled;
         this->direction_enforcement_set = true;
     }
 
+    template <typename T>
     bool RotaryEncoderSampleValidator<T>::get_direction_enforcement()
     {
         if (this->direction_enforcement_set == true)
@@ -69,6 +71,7 @@ namespace kaepek
         }
     }
 
+    template <typename T>
     void RotaryEncoderSampleValidator<T>::set_skip_tolerance(double tolerance)
     {
         if (tolerance > 0.0)
@@ -78,6 +81,7 @@ namespace kaepek
         }
     }
 
+    template <typename T>
     double RotaryEncoderSampleValidator<T>::get_skip_tolerance()
     {
         if (this->skip_tolerance_set == true)
@@ -91,6 +95,7 @@ namespace kaepek
         }
     }
 
+    template <typename T>
     void RotaryEncoderSampleValidator<T>::set_skip_threshold(uint32_t threshold)
     {
         if (threshold != 0)
@@ -100,6 +105,7 @@ namespace kaepek
         }
     }
 
+    template <typename T>
     uint32_t RotaryEncoderSampleValidator<T>::get_skip_threshold()
     {
         if (this->skip_threshold_set == true)
@@ -113,6 +119,7 @@ namespace kaepek
         }
     }
 
+    template <typename T>
     void RotaryEncoderSampleValidator<T>::set_wrong_way_tolerance(double tolerance)
     {
         if (this->direction_enforcement == true && tolerance > 0.0)
@@ -122,6 +129,7 @@ namespace kaepek
         }
     }
 
+    template <typename T>
     double RotaryEncoderSampleValidator<T>::get_wrong_direction_tolerance()
     {
         if (this->wrong_way_tolerance_set == true)
@@ -135,6 +143,7 @@ namespace kaepek
         }
     }
 
+    template <typename T>
     void RotaryEncoderSampleValidator<T>::set_wrong_way_threshold(uint32_t threshold)
     {
         if (this->direction_enforcement == true && threshold != 0)
@@ -144,6 +153,7 @@ namespace kaepek
         }
     }
 
+    template <typename T>
     uint32_t RotaryEncoderSampleValidator<T>::get_wrong_way_threshold()
     {
         if (this->wrong_way_threshold_set == true)
@@ -157,6 +167,7 @@ namespace kaepek
         }
     }
 
+    template <typename T>
     void RotaryEncoderSampleValidator<T>::setup()
     {
         this->encoder.setup();
@@ -165,6 +176,7 @@ namespace kaepek
                            this->sample_period_microseconds, false);
     }
 
+    template <typename T>
     bool RotaryEncoderSampleValidator<T>::start()
     {
         bool started_ok = true;
@@ -217,6 +229,7 @@ namespace kaepek
         return started_ok;
     }
 
+    template <typename T>
     void RotaryEncoderSampleValidator<T>::print_configuration_issues()
     {
         for (uint32_t i = 0; i < 6; i++)
@@ -229,11 +242,13 @@ namespace kaepek
         Serial.println("---------------------------------------");
     }
 
+    template <typename T>
     void RotaryEncoderSampleValidator<T>::stop()
     {
         sample_timer.stop();
     }
 
+    template <typename T>
     bool RotaryEncoderSampleValidator<T>::has_new_sample()
     {
         if (this->sample_buffer_has_been_set == false || this->fault == true)
@@ -253,22 +268,26 @@ namespace kaepek
         return true;
     }
 
+    template <typename T>
     void RotaryEncoderSampleValidator<T>::get_sample_and_elapsed_time(uint32_t &encoder_sample, uint32_t &micros_since_last_sample)
     {
         encoder_sample = this->encoder_sample;
         micros_since_last_sample = this->micros_since_last_sample;
     };
 
+    template <typename T>
     void RotaryEncoderSampleValidator<T>::post_sample_logic(uint32_t encoder_value)
     {
         Serial.println("Post sample logic run in base RotaryEncoderSampleValidator method");
     }
 
+    template <typename T>
     void RotaryEncoderSampleValidator<T>::post_fault_logic(Fault fault_code)
     {
         Serial.println("Post fault logic run in base RotaryEncoderSampleValidator method");
     }
 
+    template <typename T>
     void RotaryEncoderSampleValidator<T>::sample()
     {
         if (this->fault == true)
@@ -442,6 +461,7 @@ namespace kaepek
         }
     }
 
+    template <typename T>
     void RotaryEncoderSampleValidator<T>::fault_now()
     {
         this->fault = true;
