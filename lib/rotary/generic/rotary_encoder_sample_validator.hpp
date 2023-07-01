@@ -306,7 +306,7 @@ namespace kaepek
         volatile bool tracking_point_initalised = false;
 
         // The internal encoder instance.
-        DigitalRotaryEncoderSPI encoder;
+        T encoder;
 
         // A boolean array describing the current configuration issues of the EncoderTracker, see the ConfigurationIssue enum deftype or ConfigurationIssueMessage char array for details.
         bool configuration_issues[6] = {false};
