@@ -20,7 +20,7 @@ namespace kaepek
     void DigitalRotaryEncoderSPI<AS5147P>::setup()
     {
         // Call base implementation
-        DigitalRotaryEncoderSPI::setup();
+        DigitalRotaryEncoderSPI::setup(); // not sure fixme
         // Set read angle command bits.
         digitalWrite(this->pins.mosi, HIGH); // This can be left high, as the command is all ones.
     }

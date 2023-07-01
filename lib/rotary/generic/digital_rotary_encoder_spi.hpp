@@ -60,21 +60,21 @@ namespace kaepek
          * Method to setup the digital encoder such that it is ready to read measurement values via invocation of the read method.
          *
          */
-        virtual void setup();
+        virtual void setup() override;
 
         /**
          * Method to retrieve digital encoder measurement value.
          *
          * @return The encoder's current value.
          */
-        virtual uint32_t read() = 0;
+        virtual uint32_t read() override = 0;
 
         /**
          * Method to retrieve digital encoder measurement value.
          *
          * @param value reference to the value variable in which to populate the encoder's current measurement value.
          */
-        virtual void read(uint32_t &value) = 0;
+        virtual void read(uint32_t &value) override = 0;
 
         /**
          * Method to retrieve digital encoder measurement value.
@@ -82,7 +82,7 @@ namespace kaepek
          * @param value reference to the value variable in which to populate the encoder's current measurement value.
          * @param parity reference to the parity variable in which to populate the encoder's current parity value.
          */
-        virtual void read(uint32_t &value, bool &parity) = 0;
+        virtual void read(uint32_t &value, bool &parity) override = 0;
     };
 
 #endif
