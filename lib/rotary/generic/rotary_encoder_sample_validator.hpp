@@ -16,6 +16,7 @@ namespace kaepek
      *
      * Logic implemented within the post_fault_logic(kaepek::RotaryEncoderSampleValidator::Fault fault_code) is fired if an issue with the encoder is detected, or if set_direction_enforcement method has be called with the bool enabled = true argument and it turned against the validated direction.
      */
+    template <class T>
     class RotaryEncoderSampleValidator
     {
     public:
@@ -33,7 +34,7 @@ namespace kaepek
          * @param sample_period_microseconds
          * @return Instance of DualDigitalRotaryEncoderSampleValidatorEncoderSPI class.
          */
-        RotaryEncoderSampleValidator(DigitalRotaryEncoderSPI encoder, float sample_period_microseconds);
+        RotaryEncoderSampleValidator(T encoder, float sample_period_microseconds);
 
         /**
          * RotaryEncoderSampleValidator Fault enum class type:

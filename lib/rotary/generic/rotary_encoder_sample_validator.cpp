@@ -8,21 +8,26 @@ PeriodicTimer sample_timer(GPT1);
 
 namespace kaepek
 {
-    RotaryEncoderSampleValidator::RotaryEncoderSampleValidator() {}
+    template <typename T>
+    RotaryEncoderSampleValidator<T>::RotaryEncoderSampleValidator() {}
 
-    RotaryEncoderSampleValidator::RotaryEncoderSampleValidator(DigitalRotaryEncoderSPI encoder, float sample_period_microseconds)
+    template <typename T>
+    RotaryEncoderSampleValidator<T>::RotaryEncoderSampleValidator(T encoder, float sample_period_microseconds)
     {
+        static_assert(std::is_base_of<Encoder, T>::value, "T must inherit from Encoder");
+
         this->encoder = encoder;
         this->skip_threshold = skip_threshold;
         this->skip_tolerance = skip_tolerance;
         this->sample_period_microseconds = sample_period_microseconds;
-//#ifdef KAEPEK_ENCODER_SKIP_DEFAULT_CONFIG
-        this->set_skip_tolerance(DigitalRotaryEncoderSPI::skip_tolerance);
-        this->set_skip_threshold(DigitalRotaryEncoderSPI::skip_threshold);
-//#endif
+        // #ifdef KAEPEK_ENCODER_SKIP_DEFAULT_CONFIG
+        this->set_skip_tolerance(T::skip_tolerance);
+        this->set_skip_threshold(T::skip_threshold);
+        // #endif
     }
 
-    void RotaryEncoderSampleValidator::set_direction(Direction direction)
+    template <typename T>
+    void RotaryEncoderSampleValidator<T>::set_direction(Direction direction)
     {
         if (this->direction_enforcement == true)
         {
@@ -31,7 +36,8 @@ namespace kaepek
         }
     }
 
-    RotaryEncoderSampleValidator::Direction RotaryEncoderSampleValidator::get_direction()
+    template <typename T>
+    RotaryEncoderSampleValidator::Direction RotaryEncoderSampleValidator<T>::get_direction()
     {
         if (this->direction_set == true)
         {
@@ -44,13 +50,13 @@ namespace kaepek
         }
     }
 
-    void RotaryEncoderSampleValidator::set_direction_enforcement(bool enabled)
+    void RotaryEncoderSampleValidator<T>::set_direction_enforcement(bool enabled)
     {
         this->direction_enforcement = enabled;
         this->direction_enforcement_set = true;
     }
 
-    bool RotaryEncoderSampleValidator::get_direction_enforcement()
+    bool RotaryEncoderSampleValidator<T>::get_direction_enforcement()
     {
         if (this->direction_enforcement_set == true)
         {
@@ -63,7 +69,7 @@ namespace kaepek
         }
     }
 
-    void RotaryEncoderSampleValidator::set_skip_tolerance(double tolerance)
+    void RotaryEncoderSampleValidator<T>::set_skip_tolerance(double tolerance)
     {
         if (tolerance > 0.0)
         {
@@ -72,7 +78,7 @@ namespace kaepek
         }
     }
 
-    double RotaryEncoderSampleValidator::get_skip_tolerance()
+    double RotaryEncoderSampleValidator<T>::get_skip_tolerance()
     {
         if (this->skip_tolerance_set == true)
         {
@@ -85,7 +91,7 @@ namespace kaepek
         }
     }
 
-    void RotaryEncoderSampleValidator::set_skip_threshold(uint32_t threshold)
+    void RotaryEncoderSampleValidator<T>::set_skip_threshold(uint32_t threshold)
     {
         if (threshold != 0)
         {
@@ -94,7 +100,7 @@ namespace kaepek
         }
     }
 
-    uint32_t RotaryEncoderSampleValidator::get_skip_threshold()
+    uint32_t RotaryEncoderSampleValidator<T>::get_skip_threshold()
     {
         if (this->skip_threshold_set == true)
         {
@@ -107,7 +113,7 @@ namespace kaepek
         }
     }
 
-    void RotaryEncoderSampleValidator::set_wrong_way_tolerance(double tolerance)
+    void RotaryEncoderSampleValidator<T>::set_wrong_way_tolerance(double tolerance)
     {
         if (this->direction_enforcement == true && tolerance > 0.0)
         {
@@ -116,7 +122,7 @@ namespace kaepek
         }
     }
 
-    double RotaryEncoderSampleValidator::get_wrong_direction_tolerance()
+    double RotaryEncoderSampleValidator<T>::get_wrong_direction_tolerance()
     {
         if (this->wrong_way_tolerance_set == true)
         {
@@ -129,15 +135,16 @@ namespace kaepek
         }
     }
 
-    void RotaryEncoderSampleValidator::set_wrong_way_threshold(uint32_t threshold)
+    void RotaryEncoderSampleValidator<T>::set_wrong_way_threshold(uint32_t threshold)
     {
-        if (this->direction_enforcement == true && threshold != 0) {
-                this->wrong_way_threshold = threshold;
-                this->wrong_way_threshold_set = true;
+        if (this->direction_enforcement == true && threshold != 0)
+        {
+            this->wrong_way_threshold = threshold;
+            this->wrong_way_threshold_set = true;
         }
     }
 
-    uint32_t RotaryEncoderSampleValidator::get_wrong_way_threshold()
+    uint32_t RotaryEncoderSampleValidator<T>::get_wrong_way_threshold()
     {
         if (this->wrong_way_threshold_set == true)
         {
@@ -150,7 +157,7 @@ namespace kaepek
         }
     }
 
-    void RotaryEncoderSampleValidator::setup()
+    void RotaryEncoderSampleValidator<T>::setup()
     {
         this->encoder.setup();
         sample_timer.begin([this]
@@ -158,7 +165,7 @@ namespace kaepek
                            this->sample_period_microseconds, false);
     }
 
-    bool RotaryEncoderSampleValidator::start()
+    bool RotaryEncoderSampleValidator<T>::start()
     {
         bool started_ok = true;
 
@@ -210,7 +217,7 @@ namespace kaepek
         return started_ok;
     }
 
-    void RotaryEncoderSampleValidator::print_configuration_issues()
+    void RotaryEncoderSampleValidator<T>::print_configuration_issues()
     {
         for (uint32_t i = 0; i < 6; i++)
         {
@@ -222,12 +229,12 @@ namespace kaepek
         Serial.println("---------------------------------------");
     }
 
-    void RotaryEncoderSampleValidator::stop()
+    void RotaryEncoderSampleValidator<T>::stop()
     {
         sample_timer.stop();
     }
 
-    bool RotaryEncoderSampleValidator::has_new_sample()
+    bool RotaryEncoderSampleValidator<T>::has_new_sample()
     {
         if (this->sample_buffer_has_been_set == false || this->fault == true)
         {
@@ -246,26 +253,26 @@ namespace kaepek
         return true;
     }
 
-    void RotaryEncoderSampleValidator::get_sample_and_elapsed_time(uint32_t &encoder_sample, uint32_t &micros_since_last_sample)
+    void RotaryEncoderSampleValidator<T>::get_sample_and_elapsed_time(uint32_t &encoder_sample, uint32_t &micros_since_last_sample)
     {
         encoder_sample = this->encoder_sample;
         micros_since_last_sample = this->micros_since_last_sample;
     };
 
-    void RotaryEncoderSampleValidator::post_sample_logic(uint32_t encoder_value)
+    void RotaryEncoderSampleValidator<T>::post_sample_logic(uint32_t encoder_value)
     {
         Serial.println("Post sample logic run in base RotaryEncoderSampleValidator method");
     }
 
-    void RotaryEncoderSampleValidator::post_fault_logic(Fault fault_code)
+    void RotaryEncoderSampleValidator<T>::post_fault_logic(Fault fault_code)
     {
         Serial.println("Post fault logic run in base RotaryEncoderSampleValidator method");
     }
 
-    void RotaryEncoderSampleValidator::sample()
+    void RotaryEncoderSampleValidator<T>::sample()
     {
         if (this->fault == true)
-        { 
+        {
             // Skip sampling if fault is set to true.
             return;
         }
@@ -287,18 +294,18 @@ namespace kaepek
                 double forward_tolerance, backward_tolerance;
 
                 if (this->direction == Direction::Clockwise)
-                {                                                   // cw
-                    forward_tolerance = 1.0 * this->skip_tolerance; 
+                { // cw
+                    forward_tolerance = 1.0 * this->skip_tolerance;
                     backward_tolerance = -1.0 * this->wrong_way_tolerance;
                 }
                 else
-                {                                                    // ccw
-                    forward_tolerance = -1.0 * this->skip_tolerance; 
+                { // ccw
+                    forward_tolerance = -1.0 * this->skip_tolerance;
                     backward_tolerance = 1.0 * this->wrong_way_tolerance;
                 }
 
                 if (this->direction == Direction::Clockwise) // +ve cw
-                {                                                                         
+                {
                     if (dx > (forward_tolerance * (double)(this->skipped_steps_ctr + 1)))
                     {
                         // We have skipped forwards.
@@ -435,7 +442,7 @@ namespace kaepek
         }
     }
 
-    void RotaryEncoderSampleValidator::fault_now()
+    void RotaryEncoderSampleValidator<T>::fault_now()
     {
         this->fault = true;
         this->stop();
