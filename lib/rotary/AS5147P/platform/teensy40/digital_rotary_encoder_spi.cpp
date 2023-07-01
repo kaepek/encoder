@@ -8,11 +8,17 @@ namespace kaepek
 
     const int DIGITAL_ENCODER_AS5147P_BUFFER_LENGTH = 16;
     const uint32_t DIGITAL_ENCODER_AS5147P_BUFFER_MAX_INDEX = 15;
-    const uint32_t DIGITAL_ENCODER_AS5147P_BUFFER_VALUE_MASK  = 0x3FFF;
+    const uint32_t DIGITAL_ENCODER_AS5147P_BUFFER_VALUE_MASK = 0x3FFF;
+
+    template <>
+    const double DigitalRotaryEncoderSPI<AS5147P>::skip_tolerance = 4.0;
+
+    template <>
+    const uint32_t DigitalRotaryEncoderSPI<AS5147P>::skip_threshold = 2;
 
     template <>
     const uint32_t DigitalRotaryEncoderSPI<AS5147P>::encoder_divisions = 16384;
-    
+
     template <>
     const uint32_t DigitalRotaryEncoderSPI<AS5147P>::encoder_divisions_over_2 = 16384 / 2;
 

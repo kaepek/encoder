@@ -16,10 +16,10 @@ namespace kaepek
         this->skip_threshold = skip_threshold;
         this->skip_tolerance = skip_tolerance;
         this->sample_period_microseconds = sample_period_microseconds;
-#ifdef KAEPEK_ENCODER_SKIP_DEFAULT_CONFIG
+//#ifdef KAEPEK_ENCODER_SKIP_DEFAULT_CONFIG
         this->set_skip_tolerance(DigitalRotaryEncoderSPI::skip_tolerance);
         this->set_skip_threshold(DigitalRotaryEncoderSPI::skip_threshold);
-#endif
+//#endif
     }
 
     void RotaryEncoderSampleValidator::set_direction(Direction direction)
