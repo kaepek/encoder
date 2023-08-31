@@ -1,6 +1,7 @@
 #include "digital_rotary_encoder.hpp"
 #include "rotary_encoder_sample_validator.hpp"
 #include "TeensyTimerTool.h"
+#include <unordered_map>
 
 using namespace TeensyTimerTool;
 
@@ -131,9 +132,10 @@ namespace kaepek
 
     void RotaryEncoderSampleValidator::set_wrong_way_threshold(uint32_t threshold)
     {
-        if (this->direction_enforcement == true && threshold != 0) {
-                this->wrong_way_threshold = threshold;
-                this->wrong_way_threshold_set = true;
+        if (this->direction_enforcement == true && threshold != 0)
+        {
+            this->wrong_way_threshold = threshold;
+            this->wrong_way_threshold_set = true;
         }
     }
 
@@ -204,6 +206,7 @@ namespace kaepek
         if (started_ok == true)
         {
             sample_timer.start();
+            micros_since_last_sample_ticker = 0;
             started = true;
         }
 
@@ -225,6 +228,11 @@ namespace kaepek
     void RotaryEncoderSampleValidator::stop()
     {
         sample_timer.stop();
+        this->first_loop = true;
+        this->started = false;
+        this->sample_buffer_has_been_set = false;
+        this->wrong_direction_ctr = 0;
+        this->skipped_steps_ctr = 0;
     }
 
     bool RotaryEncoderSampleValidator::has_new_sample()
@@ -265,7 +273,7 @@ namespace kaepek
     void RotaryEncoderSampleValidator::sample()
     {
         if (this->fault == true)
-        { 
+        {
             // Skip sampling if fault is set to true.
             return;
         }
@@ -287,18 +295,18 @@ namespace kaepek
                 double forward_tolerance, backward_tolerance;
 
                 if (this->direction == Direction::Clockwise)
-                {                                                   // cw
-                    forward_tolerance = 1.0 * this->skip_tolerance; 
+                { // cw
+                    forward_tolerance = 1.0 * this->skip_tolerance;
                     backward_tolerance = -1.0 * this->wrong_way_tolerance;
                 }
                 else
-                {                                                    // ccw
-                    forward_tolerance = -1.0 * this->skip_tolerance; 
+                { // ccw
+                    forward_tolerance = -1.0 * this->skip_tolerance;
                     backward_tolerance = 1.0 * this->wrong_way_tolerance;
                 }
 
                 if (this->direction == Direction::Clockwise) // +ve cw
-                {                                                                         
+                {
                     if (dx > (forward_tolerance * (double)(this->skipped_steps_ctr + 1)))
                     {
                         // We have skipped forwards.
@@ -425,13 +433,35 @@ namespace kaepek
                 sei();
             }
         }
-        else // First value measurement, we must accept this.
+        else // First value measurement, we must accept this, but take <initial_measurements> measurements to avoid bad values and take the most common result.
         {
+            cli();
+            // take <initial_measurements> measurements
+            int initial_readings[initial_measurements] = {};
+            for (int i = 0; i < initial_measurements; i++)
+            {
+                delayMicroseconds(100);
+                initial_readings[i] = this->encoder.read();
+            }
+            // find the most frequent element
+            std::unordered_map<int, int> frequency_map;
+            int max_count = 0;
+            int most_frequent_reading = initial_readings[0];
+            for (int i = 0; i < initial_measurements; i++)
+            {
+                frequency_map[initial_readings[i]]++;
+                if (frequency_map[initial_readings[i]] > max_count)
+                {
+                    max_count = frequency_map[initial_readings[i]];
+                    most_frequent_reading = initial_readings[i];
+                }
+            }
+            // apply this initial reading
             this->sample_buffer_idx = 0;
-            this->sample_buffer_cache[this->sample_buffer_idx] = latest_encoder_value;
-            this->tracking_point = latest_encoder_value;
-            this->tracking_point_initalised = true;
+            this->sample_buffer_cache[this->sample_buffer_idx] = most_frequent_reading;
+            this->tracking_point = most_frequent_reading;
             this->first_loop = false;
+            sei();
         }
     }
 
@@ -439,6 +469,12 @@ namespace kaepek
     {
         this->fault = true;
         this->stop();
+    }
+
+    void RotaryEncoderSampleValidator::reset()
+    {
+        this->stop();
+        this->fault = false;
     }
 
 }

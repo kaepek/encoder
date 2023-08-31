@@ -28,6 +28,7 @@ namespace kaepek
 
     void post_fault_logic(RotaryEncoderSampleValidator::Fault fault_code) override
     {
+      digitalWrite(13, HIGH);
       // Do something fault specific based on the <fault_code>.
       if (fault_code == RotaryEncoderSampleValidator::Fault::SkippedSteps)
       {
@@ -54,6 +55,9 @@ bool started_ok = false;
 
 void setup()
 {
+  // Setup fault led pin
+  pinMode(13, OUTPUT);
+  
   // Setup the encoder pin configuration.
   enc_pins.csn = 10;
   enc_pins.miso = 12;

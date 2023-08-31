@@ -223,8 +223,15 @@ namespace kaepek
          */
         virtual void post_fault_logic(Fault fault_code);
 
+        // todo reset functions to clear faults.... must call stop?
+
+        /**
+         * Method to reset fault state
+         */
+        void reset();
+
     private:
-        // Donfiguration values.
+        // Configuration values.
 
         // The variable which stores the configured motion direction constraint if it has been enabled.
         Direction direction;
@@ -268,10 +275,10 @@ namespace kaepek
         // Internal state.
 
         // Whether or not the EncoderTracker has started successfully.
-        bool started = false;
+        volatile bool started = false;
         // Whether or not the EncoderTracker has detected a fault.
         volatile bool fault = false;
-        // Whether or not we have one existing sample in the EncoderTracker, the logic largely relies on difference between consecutive time steps and thus we need atleast one value before rejecting anything based on a constraint. 
+        // Whether or not we have one existing sample in the EncoderTracker, the logic largely relies on difference between consecutive time steps and thus we need atleast one value before rejecting anything based on a constraint.
         volatile bool first_loop = true;
 
         // Sample vars.
@@ -288,21 +295,20 @@ namespace kaepek
         volatile uint32_t sample_buffer_idx = 0;
         // The latest encoder value cached ready for retrieval.
         volatile uint32_t encoder_sample;
+        // The initial number of measurements before starting
+        static const int initial_measurements = 10;
 
         // Issue counters.
 
         // The number of times that the wrong direction tolerance has been exceeded while sampling.
-        uint32_t wrong_direction_ctr = 0.0;
+        uint32_t wrong_direction_ctr = 0;
         // The number of times that the skip steps tolerance has been exceeded while sampling.
-        uint32_t skipped_steps_ctr = 0.0;
+        uint32_t skipped_steps_ctr = 0;
 
         // Tracking point vars.
 
         // The latest tracking point, aka the last known validated encoder measurent value.
         volatile uint32_t tracking_point = 0;
-
-        // Value indicating whether or not the tracking point has been initalised to a valid sample value.
-        volatile bool tracking_point_initalised = false;
 
         // The internal encoder instance.
         DigitalRotaryEncoderSPI encoder;
